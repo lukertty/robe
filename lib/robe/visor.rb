@@ -48,7 +48,7 @@ module Robe
           ary << (c = c.const_get(name))
         end
         ary
-      rescue NameError
+      rescue NameError ## TODO
         []
       end
     end

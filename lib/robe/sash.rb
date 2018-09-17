@@ -18,7 +18,8 @@ module Robe
     def class_locations(name, mod)
       locations = {}
       if (obj = visor.resolve_context(name, mod)) and obj.is_a? Module
-        methods = obj.methods(false).map { |m| obj.method(m) } +
+        # methods = obj.methods(false).map { |m| obj.method(m) } +
+        methods = Object.instance_method(:methods).bind(obj).call(false).map { |m| obj.method(m) } +
                   obj.__instance_methods__(false).map { |m| obj.instance_method(m) }
         methods.each do |m|
           if loc = m.source_location

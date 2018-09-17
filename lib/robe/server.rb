@@ -10,13 +10,13 @@ module Robe
 
     def initialize(handler, port)
       @handler = handler
-      @server = TCPServer.new("127.0.0.1", port)
+      @server = TCPServer.new('127.0.0.1', port)
       @running = true
       @port = @server.addr[1]
     end
 
     def start
-      access = File.open("#{Dir.tmpdir}/robe-access-#{@port}.log", "w")
+      access = File.open("#{Dir.tmpdir}/robe-access-#{@port}.log", 'w')
       access.sync = true
 
       error_logger = Logger.new($stderr)
@@ -44,16 +44,17 @@ module Robe
 
           resp = WEBrick::HTTPResponse.new(:OutputBufferSize => 1024,
                                            :Logger => error_logger,
-                                           :HTTPVersion => "1.1")
+                                           :HTTPVersion => '1.1')
           resp.status = 200
-          resp.content_type = "application/json; charset=utf-8"
+          # resp.content_type = "application/json; charset=utf-8"
+          resp.content_type = ''
           resp.body = body
 
           begin
             resp.send_response(client)
             client.close
           rescue Errno::EPIPE
-            error_logger.error "Connection lost, unsent response:"
+            error_logger.error 'Connection lost, unsent response:'
             error_logger.error body
           end
         rescue Errno::EINVAL
@@ -67,7 +68,7 @@ module Robe
 
     def wait_for_it
       begin
-        TCPSocket.new("127.0.0.1", @port).close
+        TCPSocket.new('127.0.0.1', @port).close
       rescue
         sleep 0.05
         retry
