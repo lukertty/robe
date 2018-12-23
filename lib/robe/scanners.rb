@@ -44,6 +44,8 @@ module Robe
       mod.__send__(coll, false).grep(@re) do |sym|
         candidates << mod.instance_method(sym)
       end
+    rescue => e
+      puts "#{e.message}, #{e.class}"
     end
   end
 end
